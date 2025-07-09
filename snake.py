@@ -23,8 +23,8 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('贪吃蛇')
 clock = pygame.time.Clock() # Keep clock for tick
 
-# 强制使用本地 NotoSansSC-VariableFont_wght.ttf 字体
-FONT_PATH = 'NotoSansSC-VariableFont_wght.ttf'
+# 强制使用 static 目录下的 NotoSansSC-VariableFont_wght.ttf 字体
+FONT_PATH = 'static/NotoSansSC-VariableFont_wght.ttf'
 try:
     font = pygame.font.Font(FONT_PATH, 25)
     game_over_font = pygame.font.Font(FONT_PATH, 40)
