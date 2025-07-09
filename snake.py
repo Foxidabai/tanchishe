@@ -23,8 +23,8 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('贪吃蛇')
 clock = pygame.time.Clock() # Keep clock for tick
 
-# 强制使用 static 目录下的 NotoSansSC-VariableFont_wght.ttf 字体
-FONT_PATH = 'static/NotoSansSC-VariableFont_wght.ttf'
+# 优先加载 static/NotoSansSC-Regular.ttf 字体
+FONT_PATH = 'static/NotoSansSC-Regular.ttf'
 try:
     font = pygame.font.Font(FONT_PATH, 25)
     game_over_font = pygame.font.Font(FONT_PATH, 40)
@@ -116,16 +116,8 @@ def main():
             head_x += BLOCK_SIZE
         new_head = (head_x, head_y)
 
-        # 检查碰撞
-        if (
-            head_x < 0 or head_x >= WIDTH or
-            head_y < 0 or head_y >= HEIGHT or
-            new_head in snake
-        ):
-            running = False
-            break
-
         snake.insert(0, new_head)
+        # 先判断是否吃到食物
         if new_head == food:
             score += 1
             food = random_food(snake)
@@ -133,15 +125,19 @@ def main():
         else:
             snake.pop()
 
-        # 在窗口标题栏显示分数
+        # 再判断碰撞
+        if (
+            head_x < 0 or head_x >= WIDTH or
+            head_y < 0 or head_y >= HEIGHT or
+            new_head in snake[1:]
+        ):
+            running = False
+            break
+
         pygame.display.set_caption(f'贪吃蛇 | 得分: {score}')
-        # 绘制渐变背景
         draw_gradient_bg()
-        # 绘制蛇（支持贴图）
         draw_snake(snake, direction)
-        # 绘制食物
         draw_food(food)
-        # 绘制分数栏
         score_text = font.render(f'得分: {score}', True, WHITE)
         score_bg_rect = pygame.Surface((140, 40), pygame.SRCALPHA)
         score_bg_rect.fill(SCORE_BG)
